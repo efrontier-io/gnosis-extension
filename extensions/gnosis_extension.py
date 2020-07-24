@@ -1019,7 +1019,7 @@ class DfusionContract:
         self.private_key = private_key
         self.account = Account.privateKeyToAccount(self.private_key)
         self.contract_address = self.web3.toChecksumAddress(contract_address)
-        self.gnosis_gas_station_url = kwargs.get('gnosis_gas_station_url', 'https://safe-relay.rinkeby.gnosis.io/api/v1/gas-station/')
+        self.gnosis_gas_station_url = kwargs.get('gnosis_gas_station_url', 'https://safe-relay.gnosis.io/api/v1/gas-station/')
 
         abi_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'gnosis/exchange_abi.json')
 
