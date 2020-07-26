@@ -2,7 +2,7 @@
 
 # API to work with Gnosis Protocol order
 #
-# Efficient Frontier, 2020
+# (C) Odyssey Technological Innovation Ltd., 2020
 from ccxt.base.errors import InvalidOrder, OrderNotFound, InsufficientFunds
 from dataclasses import dataclass, asdict
 from functools import partial
@@ -22,7 +22,7 @@ from sgqlc.operation import Operation
 from . gnosis.graphql_schema import graphql_schema as schema  # generated
 from . gnosis.errors import TokenNotFoundException, UnknownTokenException, GasTooHigh
 
-__version__ = '2.0.0'
+__version__ = '2.0.0-alpha'
 
 GAS_GNOSIS_ORDER = 144_000
 GAS_GNOSIS_BATCH_ORDER = 98_000  # per order
@@ -1186,55 +1186,3 @@ class DfusionContract:
 
         return price
 
-    def create_filter(self, event_type, params=None):
-        # 9340147 block # when the contract has been deployed
-        # filter_builder = self.dfusion_contract.contract.events.Trade.buildFilter()
-        # events = filter.get_all_entries()
-        # for event in events:
-        #     print(event)
-        # fromBlock = 'latest'
-        """
-        See https://etherscan.io/address/0x6f400810b62df8e13fded51be75ff5393eaa841f#code
-        for list of events
-
-        event OrderPlacement(
-            address indexed owner,
-            uint16 index,
-            uint16 indexed buyToken,
-            uint16 indexed sellToken,
-            uint32 validFrom,
-            uint32 validUntil,
-            uint128 priceNumerator,
-            uint128 priceDenominator
-        );
-        event Trade(
-        address indexed owner,
-        uint16 indexed orderId,
-        uint16 indexed sellToken,
-        uint16 buyToken,
-        uint128 executedSellAmount,
-        uint128 executedBuyAmount
-        );
-
-        event TradeReversion(
-            address indexed owner,
-            uint16 indexed orderId,
-            uint16 indexed sellToken,
-            // Solidity only supports three indexed arguments
-            uint16 buyToken,
-            uint128 executedSellAmount,
-            uint128 executedBuyAmount
-        );
-        """
-        filter_params = dict(fromBlock='latest')
-        if type(params) == dict:
-            filter_params.update(params)
-
-        if event_type == 'OrderPlacement':
-            result = self.contract.events.OrderPlacement.createFilter(**filter_params)
-        elif event_type == 'Trade':
-            result = self.contract.events.Trade.createFilter(**filter_params)
-        elif event_type == 'TradeReversion':
-            result = self.contract.events.TradeReversion.createFilter(**filter_params)
-
-        return result
